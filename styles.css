@@ -1,0 +1,78 @@
+*{
+    background-color: black;
+}
+
+#Game-Container {
+    color: white;
+    width: 80%;
+    height: 100%;
+    border: 3px solid rgb(185, 16, 16);
+    border-radius: 10%;
+    margin: auto;
+    background-image: url("/images/colosseum.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.display-container{
+    width:20%;
+    height: 300px;
+}
+#Player_Stats {
+    width:20%;
+}
+#Gladiator_Stats {
+    width: 20%;
+}
+
+#Options-Container {
+    height: 100%;
+    width: 40%;
+    bottom: 0;
+    display:flex;
+    align-content: center;
+    flex-direction:column;
+
+}
+.option {
+    text-align: center;
+    height: 60px;
+    margin: auto;
+    width: 90%;
+    border: 1px solid gold;
+}
+
+#Player-Info{
+    border: 1px dashed gold;
+    position: absolute;
+    bottom: 5%;
+    margin: 30px;
+    width: 100%;
+    height:25%;
+    display: flex;
+    border-radius:20%
+}
+
+#Message-Board{
+    position:absolute;
+    top: 0px;
+    right: 0px;
+    margin: 10px;
+    height: 300px;
+    width: 400px;
+    font-size: 20px;
+    border: 1px dashed gold;
+    overflow:hidden;
+}
+
+.visuals{
+    margin-top:20px;
+    margin-left:10px;
+    width: 20%;
+    display:flex;
+}
+.visual{
+    height:100px;
+    width:50%;
+    border: 1px dashed gold;
+}
