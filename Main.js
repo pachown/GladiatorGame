@@ -33,6 +33,8 @@ class Gladiator {
 let state = {
     //All things that can change go in here
     gladiator: new Gladiator(),
+    menu: "main",
+    
 
 }
 
@@ -97,7 +99,7 @@ postToBoard = function(text){
 }
 
 updateStats = function(stats) {
-    console.log(stats, state);
+    console.log("stats: " + stats, "state: " + state);
     $health = stats.health;
     $attack = stats.attack;
     $regeneration = stats.regeneration;
@@ -107,6 +109,7 @@ updateStats = function(stats) {
 }
  
 let mainMenu = function() {
+    state.menu = "main"
     $option1.text("Glutton - Health & Regen");
     $option2.text("Hercules - Strength");
     $option3.text("Politician - Money");
@@ -130,7 +133,7 @@ let mainMenu = function() {
         gladiator = createCharacter('godlike');
         postToBoard('You chose ZEUS. The real God of THUNDER.')
     })
-    console.log(gladiator)
+    console.log("Gladiator in creation: " + gladiator)
     state.gladiator = gladiator;
     updateStats(state.gladiator);
     //display new message to messageboard
