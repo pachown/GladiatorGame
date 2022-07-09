@@ -25,7 +25,7 @@
     width: 20%;
 }
 
-#Options-Container {
+.Options-Container {
     height: 100%;
     width: 40%;
     bottom: 0;
@@ -40,6 +40,10 @@
     margin: auto;
     width: 90%;
     border: 1px solid gold;
+}
+
+.header{
+    font-size: 1.5rem;
 }
 
 #Player-Info{

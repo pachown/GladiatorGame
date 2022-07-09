@@ -22,13 +22,70 @@
                     <p id="Gladiator_Skillpoints" class="gladiator-stat">Skillpoints Available: 0</p>
                 </div>
                     
-                <div id="Options-Container">
-                    <p id="Option1" class="option">Fat Gladiator - Health</p>
-                    <p id="Option2" class="option">Strong Gladiator - Attack</p>
-                    <p id="Option3" class="option">Rich Gladiator - Money</p>
-                    <p id="Option4" class="option">Godlike Gladiator - Who wants to fight the final boss?</p>       
+                <!-- All options containers in the same spot. As the game changes state, the options for the menu will become available -->
+                <div id="Main_Menu_Options" class="Options-Container">
+                    <p class="option header">Choose Your Gladiator</p>
+                    <p id="Main-Option1" class="option" onclick='createCharacter("Thicc McGumbles")'>Thicc McGumbles - Health</p>
+                    <p id="Main-Option2" class="option" onclick='createCharacter("Hercules Strongbad")'>Hercules Strongbad - Attack</p>
+                    <p id="Main-Option3" class="option" onclick='createCharacter("Aurelius")'>Aurelius The Shamed Politician - Money</p>
+                    <p id="Main-Option4" class="option" onclick='createCharacter("Zeus")'>Zues - Literally God</p>       
                 </div>
-    
+                <div id="Training_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Train Your Gladiator</p>
+                    <p id="Training-Option1" class="option" onclick='skillupMenu()'>Spend Skillpoints</p>
+                    <p id="Training-Option2" class="option" onclick='weaponsMenu()'>Buy Weapons</p>
+                    <p id="Training-Option3" class="option" onclick='armorMenu()'>Buy Armor</p>
+                    <p id="Training-Option4" class="option" onclick='difficultyMenu()'>Next Battle</p>       
+                </div>
+                <div id="Skillup_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">How would you like to use your skillpoints?</p>
+                    <p id="Skillup-Option1" class="option">Level Health +1</p>
+                    <p id="Skillup-Option2" class="option">Level Attack +1</p>
+                    <p id="Skillup-Option3" class="option">Level Regen +1</p>
+                    <p id="Skillup-Option4" class="option">Get $10</p>       
+                </div>
+                <div id="Weapons_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Weapons Shop - Weapons Don't Stack</p>
+                    <p id="Weapons-Option1" class="option">Pugio + Shield - 5 Damage - $20</p>
+                    <p id="Weapons-Option2" class="option">Gladius + Shield - 10 Damage - $100</p>
+                    <p id="Weapons-Option3" class="option">Trident & Retes - 20 Damage - $500</p>
+                    <p id="Weapons-Option4" class="option" onclick='trainingMenu()'>Go Back</p>       
+                </div>
+                <div id="Armor_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Armor Shop - Armor Doesn't Stack</p>
+                    <p id="Armor-Option1" class="option">Retiarius Armor - 5 Armor - $20</p>
+                    <p id="Armor-Option2" class="option">Mirmillo Armor - 10 Armor - $100</p>
+                    <p id="Armor-Option3" class="option">Provacator Armor - 20 Armor - $500</p>
+                    <p id="Armor-Option4" class="option" onclick='trainingMenu()'>Go Back</p>       
+                </div>
+                <div id="Battle_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Choose Your Opponent</p>
+                    <p id="Difficulty-Option1" class="option">Aggressive - Attack Boost & Armor Down</p>
+                    <p id="Difficulty-Option2" class="option">Defensive - Armor Boost & Attack Down</p>
+                    <p id="Difficulty-Option3" class="option">Bandage - Regen Boost</p>
+                    <p id="Difficulty-Option4" class="option">Play To The Crowd - $$$</p>       
+                </div>
+                <div id="Difficulty_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Choose Your Opponent</p>
+                    <p id="Difficulty-Option1" class="option">Facilis Proelium- Easy Fight</p>
+                    <p id="Difficulty-Option2" class="option">Regularis Proelium- Medium Fight</p>
+                    <p id="Difficulty-Option3" class="option">Durum Proelium - Hard Fight</p>
+                    <p id="Difficulty-Option4" class="option">Deus Maximus- God of the Arena</p>       
+                </div>
+                <div id="Victory_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Thumbs up!</p>
+                    <p id="Victory-Option1" class="option" onclick='trainingMenu()'>Back to Training</p>
+                    <p id="Victory-Option2" class="option"></p>
+                    <p id="Victory-Option3" class="option"></p>
+                    <p id="Victory-Option4" class="option"></p>       
+                </div>
+                <div id="Defeat_Menu_Options" class="Options-Container" style="display:none">
+                    <p class="option header">Thumbs Down - What a Pity</p>
+                    <p id="Defeat-Option1" class="option" onclick='mainMenu()'>Back to Main Menu</p>
+                    <p id="Defeat-Option2" class="option"></p>
+                    <p id="Defeat-Option3" class="option"></p>
+                    <p id="Defeat-Option4" class="option"></p>       
+                </div>    
                 <div id="Player_Stats" class="display-container">
                     <p id="player-money">Money: 10</p>
                 </div>

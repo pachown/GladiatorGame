@@ -1,27 +1,30 @@
-let gameContainer = document.getElementById(".Game-Container");
-
-//4 options
-let $option1 = $("#Option1");
-let $option2 = $("#Option2");
-let $option3 = $("#Option3");
-let $option4 = $("#Option4");
-
 //character stats
 let $attack = $("#Gladiator_Attack");
 let $health = $("#Gladiator_Health");
 let $regeneration = $("#Gladiator_Regeneration");
 let $armor = $("#Gladiator_Armor");
-let level = $("#Gladiator_Level");
-let skillpoints = $("#Gladiator_Skillpoint");
+let $level = $("#Gladiator_Level");
+let $skillpoints = $("#Gladiator_Skillpoint");
 
 //Visually changing divs
-let messageBoard = $("#Message-Board");
-let visual1 = document.getElementById(".Visual1");
-let visual2 = document.getElementById(".Visual2");
+let $allMenus = $(".Options-Container")
+let $mainMenu = $("#Main_Menu_Options");
+let $trainingMenu = $("#Training_Menu_Options");
+let $skillupMenu = $("#Skillup_Menu_Options");
+let $weaponsMenu = $("#Weapons_Menu_Options");
+let $armorMenu = $("#Armor_Menu_Options");
+let $BattleMenu = $("#Battle_Menu_Options");
+let $difficultyMenu = $("#Difficulty_Menu_Options");
+let $victoryMenu = $("#Victory_Menu_Options");
+let $defeatMenu = $("#Defeat_Menu_Options");
 
-class Gladiator {
+let $visual1 = document.getElementById(".Visual1");
+let $visual2 = document.getElementById(".Visual2");
+
+let Gladiator = class Gladiator {
     constructor(health = 10, attack = 10, regeneration = 1, armor = 1) {
         this.health = health;
+        this.currentHealth = this.health;
         this.attack = attack;
         this.regeneration = regeneration;
         this.armor = armor;
@@ -31,38 +34,38 @@ class Gladiator {
 }
 
 let state = {
-    //All things that can change go in here
-    gladiator: new Gladiator(),
+    gladiator: undefined,
     menu: "main",
-    
+    opponent: undefined
 
 }
 
 createCharacter = function(choice) {
     const characters = {
-        'fat': (15, 8, 3, 1, 1),
-        'strong': (12, 15, 2, 1),
-        'rich': (10, 10, 1, 1),
-        'godlike': (50, 50, 10, 10)
+        "Thicc McGumbles": (15, 8, 3, 1),
+        "Hercules Strongbad": (12, 15, 2, 1),
+        "Aurelius": (10, 10, 1, 1),
+        "Zeus": (50, 50, 10, 10)
     }
-    console.log(characters[choice] + ' hello ' + choice)
-    let gladiator = new Gladiator(characters[choice])
-    return gladiator;
+    let gladiator = new Gladiator(characters[choice]);
+    console.log(choice, characters[choice], characters["Zeus"])
+    state.gladiator = gladiator;
+    postToBoard(`Hiring ${choice}`);
+    updateStats(state.gladiator);
+    trainingMenu();
 }
 
-let foes = {
-    "easy": {
-        glad: new Gladiator(4, 3, 0, 1)
-    },
-    "medium": {
-        glad: new Gladiator(6, 4, 0, 2)
-    },
-    "hard": {
-        glad: new Gladiator(10, 6, 0, 3)
-    },
-    "champion": {
-        glad: new Gladiator(20, 15, 0, 5)
-    }
+createFoe = function(choice) {
+    const foes = {
+        "easy": (4, 3, 0, 1),
+        "medium": (6, 4, 0, 2),
+        "hard": (10, 6, 0, 3),
+        "god": (20, 15, 0, 5)
+        }
+        let gladiator = new Gladiator(foes[choice]);
+        state.foe = gladiator;
+        postToBoard(`Fighting ${choice}`);
+
 }
 
 fight = function(player, foe) {
@@ -76,17 +79,6 @@ fight = function(player, foe) {
     return(`Your gladiator loses ${foeAttack} health leaving you with ${player.health} health.`, `Your foe loses ${playerAttack} health leaving him with ${foe.health}`)
 }
 
-randomizeWeather = function() {
-    let options = {
-        0 : "health",
-        1 : "attack",
-        2 : "regeneration",
-        3 : "armor",
-        4 : "level"
-    }
-    let weatherOption = options[Math.floor(Math.random(5))];
-    return(weatherOption);
-}
 
 levelup = function(character) {
     character.level++;
@@ -99,63 +91,75 @@ postToBoard = function(text){
 }
 
 updateStats = function(stats) {
-    console.log("stats: " + stats, "state: " + state);
-    $health = stats.health;
-    $attack = stats.attack;
-    $regeneration = stats.regeneration;
-    $armor = stats.armor;
-    $level = stats.level;
-    $skillpoints = stats.skillpoints;
-}
- 
-let mainMenu = function() {
-    state.menu = "main"
-    $option1.text("Glutton - Health & Regen");
-    $option2.text("Hercules - Strength");
-    $option3.text("Politician - Money");
-    $option4.text("Zeus - Champ Status");
-
-    let gladiator;
-    $option1.click((e) => {
-        gladiator = createCharacter('fat');
-        postToBoard('You chose the Glutton');
-    })
-    $option2.click((e) => {
-        gladiator = createCharacter('strong');
-        postToBoard('You chose Hercules')
-    })
-    $option3.click((e) => {
-        gladiator = createCharacter('rich');
-        postToBoard('You chose the Politician')
-
-    })
-    $option4.click((e) => {
-        gladiator = createCharacter('godlike');
-        postToBoard('You chose ZEUS. The real God of THUNDER.')
-    })
-    console.log("Gladiator in creation: " + gladiator)
-    state.gladiator = gladiator;
-    updateStats(state.gladiator);
-    //display new message to messageboard
-    //replace visuals with game logo
-    //create 
-    //go to trainingScreen 
+    $health.text("Health: " + stats.health);
+    $attack.text("Attack: " + stats.attack);
+    $regeneration.text("Regeneration: " + stats.regeneration);
+    $armor.text("Armor: " + stats.armor);
+    $level.text("Level: " + stats.level);
+    $skillpoints.text("Skillpoints Left" + stats.skillpoints);
 }
 
-let trainingScreen = function() {
-
+//MainMenu
+//1. Set state
+//2. Display current options menu
+//3. 
+var mainMenu = function() {
+    state.menu = "main";
+    $allMenus.hide();
+    $mainMenu.show();
 }
 
-let difficultyScreen = function() {
-
+var trainingMenu = function() {
+    state.menu = "training"
+    $allMenus.hide();
+    $trainingMenu.show();
 }
 
-let victoryScreen = function() {
-
+var skillupMenu = function() {
+    if (state.gladiator.skillpoints = 0){
+        postToBoard(`Skillpoints required to level up`);
+        trainingMenu();
+    }
+    state.menu = "skillup";
+    $allMenus.hide();
+    $skillupMenu.show();
+    
 }
 
-let defeatScreen = function() {
+var difficultyMenu = function() {
+    state.menu = "difficulty";
+    $allMenus.hide();
+    $difficultyMenu.show();
+}
 
+var weaponsMenu = function() {
+    state.menu = "weapons";
+    $allMenus.hide();
+    $weaponsMenu.show();
+}
+
+var armorMenu = function() {
+    state.menu = "armor";
+    $allMenus.hide();
+    $armorMenu.show();
+}
+
+var battleMenu = function() {
+    state.menu = "battle";
+    $allMenus.hide();
+    $battleMenu.show();
+}
+
+var victoryMenu = function() {
+    state.menu = "victory";
+    $allMenus.hide();
+    $victoryMenu.show();
+}
+
+var defeatMenu = function() {
+    state.menu = "defeat";
+    $allMenus.hide();
+    $defeatMenu.show();
 }
 
 mainMenu();
@@ -165,10 +169,22 @@ mainMenu();
 
 
 
-    //flow:
-    //1. Menu screen that has character options
-    //2. Training screen where you level up your fighter's stats once per skillpoint
-    //3. Choose the difficulty of your next fight
-    //3. Battle screen when fight calculation is done
-    //4. Victory screen -> Back to training screen
-    //5. Defeat screen -> Back to main menu
+//flow:
+//1. Menu screen that has character options
+//2. Training screen where you level up your fighter's stats once per skillpoint
+//3. Choose the difficulty of your next fight
+//3. Battle screen when fight calculation is done
+//4. Victory screen -> Back to training screen
+//5. Defeat screen -> Back to main menu
+
+// randomizeWeather = function() {
+//     let options = {
+//         0 : "health",
+//         1 : "attack",
+//         2 : "regeneration",
+//         3 : "armor",
+//         4 : "level"
+//     }
+//     let weatherOption = options[Math.floor(Math.random(5))];
+//     return(weatherOption);
+// }
