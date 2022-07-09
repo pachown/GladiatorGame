@@ -4,7 +4,8 @@ let $health = $("#Gladiator_Health");
 let $regeneration = $("#Gladiator_Regeneration");
 let $armor = $("#Gladiator_Armor");
 let $level = $("#Gladiator_Level");
-let $skillpoints = $("#Gladiator_Skillpoint");
+let $skillpoints = $("#Gladiator_Skillpoints");
+let $money = $("#Player_Money")
 
 //Visually changing divs
 let $allMenus = $(".Options-Container")
@@ -13,7 +14,7 @@ let $trainingMenu = $("#Training_Menu_Options");
 let $skillupMenu = $("#Skillup_Menu_Options");
 let $weaponsMenu = $("#Weapons_Menu_Options");
 let $armorMenu = $("#Armor_Menu_Options");
-let $BattleMenu = $("#Battle_Menu_Options");
+let $battleMenu = $("#Battle_Menu_Options");
 let $difficultyMenu = $("#Difficulty_Menu_Options");
 let $victoryMenu = $("#Victory_Menu_Options");
 let $defeatMenu = $("#Defeat_Menu_Options");
@@ -29,26 +30,28 @@ let Gladiator = class Gladiator {
         this.regeneration = regeneration;
         this.armor = armor;
         this.level = 1;
-        this.skillpoints = 1;
+        this.skillpoints = 100;
+        this.armorFromItems = 0;
+        this.attackFromItems = 0;
     }
 }
 
 let state = {
     gladiator: undefined,
     menu: "main",
-    opponent: undefined
+    opponent: undefined,
+    money: 1000
 
 }
 
 createCharacter = function(choice) {
     const characters = {
-        "Thicc McGumbles": (15, 8, 3, 1),
-        "Hercules Strongbad": (12, 15, 2, 1),
-        "Aurelius": (10, 10, 1, 1),
-        "Zeus": (50, 50, 10, 10)
+        "Thicc McGumbles": new Gladiator(15, 8, 3, 1),
+        "Hercules Strongbad": new Gladiator(12, 15, 2, 1),
+        "Aurelius": new Gladiator(10, 10, 1, 1),
+        "Zeus": new Gladiator(50, 50, 10, 10)
     }
-    let gladiator = new Gladiator(characters[choice]);
-    console.log(choice, characters[choice], characters["Zeus"])
+    let gladiator = characters[choice];
     state.gladiator = gladiator;
     postToBoard(`Hiring ${choice}`);
     updateStats(state.gladiator);
@@ -57,18 +60,22 @@ createCharacter = function(choice) {
 
 createFoe = function(choice) {
     const foes = {
-        "easy": (4, 3, 0, 1),
-        "medium": (6, 4, 0, 2),
-        "hard": (10, 6, 0, 3),
-        "god": (20, 15, 0, 5)
+        "Facilis Proelium": new Gladiator(4, 3, 0, 1),
+        "Regularis Proelium": new Gladiator(6, 4, 0, 2),
+        "Durum Proelium": new Gladiator(10, 6, 0, 3),
+        "Deus Maximus": new Gladiator(75, 15, 0, 5)
         }
-        let gladiator = new Gladiator(foes[choice]);
+        let gladiator = foes[choice];
         state.foe = gladiator;
         postToBoard(`Fighting ${choice}`);
-
 }
 
-fight = function(player, foe) {
+battleStart = function(choice){
+    createFoe(choice);
+    battleMenu();
+}
+
+fight = function(choice) {
     foeAttack = player.attack - foe.armor
     playerAttack = foe.attack - player.armor
     player.health = foeAttack;
@@ -86,17 +93,52 @@ levelup = function(character) {
     character.skillpoints++;
 }
 
+skillup = function(choice){
+    let options = {
+        health: `Your health went up to ${state.gladiator.health + 1}`,
+        attack: `Your attack went up to ${state.gladiator.attack + 1}`,
+        regeneration: `Your regeneration went up to ${state.gladiator.regeneration + 1}`,
+        money: `Your money went up to ${state.money + 1}`
+    }
+    if(choice !== "money"){
+        state.gladiator[choice]++;
+    } else {
+        state.money += 3;
+    }
+    state.gladiator.skillpoints--;
+    updateStats(state.gladiator);
+    postToBoard(options[choice]);
+    skillupMenu();
+}
+
 postToBoard = function(text){
     $("#Message-Board").prepend(`<p>${text}<p>`);
 }
 
 updateStats = function(stats) {
     $health.text("Health: " + stats.health);
-    $attack.text("Attack: " + stats.attack);
+    $attack.text("Attack: " + stats.attack + " + " + stats.attackFromItems);
     $regeneration.text("Regeneration: " + stats.regeneration);
-    $armor.text("Armor: " + stats.armor);
+    $armor.text("Armor: " + stats.armor + " + " + stats.armorFromItems);
     $level.text("Level: " + stats.level);
-    $skillpoints.text("Skillpoints Left" + stats.skillpoints);
+    $skillpoints.text("Skillpoints Left: " + stats.skillpoints);
+    $money.text("Money: " + state.money);
+}
+
+buyItem = function(attack, armor, cost, name){
+    if (state.money < cost){
+        postToBoard('You do not have enough money for that.');
+        return;
+    }
+    let change = attack > 0 ? `Attack by ${attack}` : `Armor by ${armor}`;
+        if(attack > 0) {
+            state.gladiator.attackFromItems = attack;
+        } else {
+            state.gladiator.armorFromItems = armor;
+        }
+        state.money -= cost;
+    postToBoard(`You purchased the ${name} for $${cost}. It increased your ${change}`)
+    updateStats(state.gladiator);
 }
 
 //MainMenu
@@ -116,14 +158,14 @@ var trainingMenu = function() {
 }
 
 var skillupMenu = function() {
-    if (state.gladiator.skillpoints = 0){
+    if (state.gladiator.skillpoints <= 0){
         postToBoard(`Skillpoints required to level up`);
         trainingMenu();
+        return;
     }
     state.menu = "skillup";
     $allMenus.hide();
     $skillupMenu.show();
-    
 }
 
 var difficultyMenu = function() {
