@@ -25,10 +25,21 @@
                 <!-- All options containers in the same spot. As the game changes state, the options for the menu will become available -->
                 <div id="Main_Menu_Options" class="Options-Container">
                     <p class="option header">Choose Your Gladiator</p>
-                    <p id="Main-Option1" class="option" onclick='createCharacter("Thicc McGumbles")'>Thicc McGumbles - Health</p>
-                    <p id="Main-Option2" class="option" onclick='createCharacter("Hercules Strongbad")'>Hercules Strongbad - Attack</p>
-                    <p id="Main-Option3" class="option" onclick='createCharacter("Aurelius")'>Aurelius The Shamed Politician - Money</p>
-                    <p id="Main-Option4" class="option" onclick='createCharacter("Zeus")'>Zues - Literally God</p>       
+                    <div class="gladiator_row">
+                        <div class="gladiator_card">
+                            <img src="/images/colosseum.jpg" alt="Avatar" style="width:100%">
+                            <div class="gladiator_container">
+                              <h4><b>Rambo</b></h4> 
+                              <p>War: “Old Men Start It, Young Men Fight It, Nobody Wins, Everybody In The Middle Dies, And Nobody Tells The Truth!”</p> 
+                            </div>
+                          </div>
+                    </div>
+                    <div class="gladiator_row">
+                    </div>
+                    <div class="gladiator_row">
+                    </div>
+                    <div class="gladiator_row">
+                    </div>
                 </div>
                 <div id="Training_Menu_Options" class="Options-Container" style="display:none">
                     <p class="option header">Train Your Gladiator</p>
@@ -80,7 +91,7 @@
                     <p id="Victory-Option4" class="option"></p>       
                 </div>
                 <div id="Defeat_Menu_Options" class="Options-Container" style="display:none">
-                    <p class="option header">Your Gladiator Died Well</p>
+                    <p class="option header">You Died</p>
                     <p id="Defeat-Option1" class="option" onclick='mainMenu()'>Back to Main Menu</p>
                     <p id="Defeat-Option2" class="option"></p>
                     <p id="Defeat-Option3" class="option"></p>
@@ -92,21 +103,6 @@
             </div>
 
         </div>
-        <!-- <div id="Training-Container" class="Game-State">
-            <div id="Options-Container">
-                <div id="Option1" class="option"></div>
-                <div id="Option2" class="option"></div>
-                <div id="Option3" class="option"></div>
-                <div id="Option4" class="option"></div>       
-            </div>
-        </div> -->
     </body>
     <script src="Main.js"></script>
 </html>
-
-<!-- this.health = health;
-this.attack = attack;
-this.regeneration = regeneration;
-this.armor = armor;
-this.level = 1;
-this.skillpoints = 1; -->

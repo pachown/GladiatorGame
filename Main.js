@@ -245,28 +245,3 @@ var defeatMenu = function() {
 }
 
 mainMenu();
-
-//function that creates an end game screen
-// EndGame()
-
-
-
-//flow:
-//1. Menu screen that has character options
-//2. Training screen where you level up your fighter's stats once per skillpoint
-//3. Choose the difficulty of your next fight
-//3. Battle screen when fight calculation is done
-//4. Victory screen -> Back to training screen
-//5. Defeat screen -> Back to main menu
-
-// randomizeWeather = function() {
-//     let options = {
-//         0 : "health",
-//         1 : "attack",
-//         2 : "regeneration",
-//         3 : "armor",
-//         4 : "level"
-//     }
-//     let weatherOption = options[Math.floor(Math.random(5))];
-//     return(weatherOption);
-// }
