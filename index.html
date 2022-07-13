@@ -67,10 +67,10 @@
                 </div>
                 <div id="Battle_Menu_Options" class="Options-Container" style="display:none">
                     <p class="option header">Choose Your Opponent</p>
-                    <p id="Difficulty-Option1" class="option" onclick='fight("Aggressive")'>Aggressive - Attack Boost & Armor Down</p>
-                    <p id="Difficulty-Option2" class="option" onclick='fight("Defensive")'>Defensive - Armor Boost & Attack Down</p>
-                    <p id="Difficulty-Option3" class="option" onclick='fight("Bandage")'>Bandage - Regen Boost</p>
-                    <p id="Difficulty-Option4" class="option" onclick='fight("Crowd")'>Play To The Crowd - $$$</p>       
+                    <p id="Difficulty-Option1" class="option" onclick='fight(1.5,0.5,0,0)'>Aggressive - Attack Boost & Armor Down</p>
+                    <p id="Difficulty-Option2" class="option" onclick='fight(0.5,1.5,0,0)'>Defensive - Armor Boost & Attack Down</p>
+                    <p id="Difficulty-Option3" class="option" onclick='fight(0,0,3,0)'>Bandage - Regen Boost</p>
+                    <p id="Difficulty-Option4" class="option" onclick='fight(0,0,0,2)'>Play To The Crowd - $$$</p>       
                 </div>
                 <div id="Victory_Menu_Options" class="Options-Container" style="display:none">
                     <p class="option header">Thumbs up!</p>
@@ -80,7 +80,7 @@
                     <p id="Victory-Option4" class="option"></p>       
                 </div>
                 <div id="Defeat_Menu_Options" class="Options-Container" style="display:none">
-                    <p class="option header">Thumbs Down - What a Pity</p>
+                    <p class="option header">Your Gladiator Died Well</p>
                     <p id="Defeat-Option1" class="option" onclick='mainMenu()'>Back to Main Menu</p>
                     <p id="Defeat-Option2" class="option"></p>
                     <p id="Defeat-Option3" class="option"></p>

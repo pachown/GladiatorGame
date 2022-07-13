@@ -25,12 +25,12 @@ let $visual2 = document.getElementById(".Visual2");
 let Gladiator = class Gladiator {
     constructor(health = 10, attack = 10, regeneration = 1, armor = 1) {
         this.health = health;
-        this.currentHealth = this.health;
+        this.maxHealth = health;
         this.attack = attack;
         this.regeneration = regeneration;
         this.armor = armor;
         this.level = 1;
-        this.skillpoints = 100;
+        this.skillpoints = 2;
         this.armorFromItems = 0;
         this.attackFromItems = 0;
     }
@@ -39,8 +39,8 @@ let Gladiator = class Gladiator {
 let state = {
     gladiator: undefined,
     menu: "main",
-    opponent: undefined,
-    money: 1000
+    foe: undefined,
+    money: 10
 
 }
 
@@ -54,19 +54,23 @@ createCharacter = function(choice) {
     let gladiator = characters[choice];
     state.gladiator = gladiator;
     postToBoard(`Hiring ${choice}`);
-    updateStats(state.gladiator);
+    if(choice === "Aurelius"){
+        state.money += 20;
+        postToBoard("Aurelius adds $20 to your account")
+    }
+    updateStats();
     trainingMenu();
 }
 
 createFoe = function(choice) {
     const foes = {
-        "Facilis Proelium": new Gladiator(4, 3, 0, 1),
-        "Regularis Proelium": new Gladiator(6, 4, 0, 2),
-        "Durum Proelium": new Gladiator(10, 6, 0, 3),
-        "Deus Maximus": new Gladiator(75, 15, 0, 5)
+        "Facilis Proelium": new Gladiator(4, 3, 1, 1),
+        "Regularis Proelium": new Gladiator(6, 4, 2, 2),
+        "Durum Proelium": new Gladiator(25, 12, 3, 3),
+        "Deus Maximus": new Gladiator(75, 25, 4, 5)
         }
-        let gladiator = foes[choice];
-        state.foe = gladiator;
+        let foe = foes[choice];
+        state.foe = foe;
         postToBoard(`Fighting ${choice}`);
 }
 
@@ -75,22 +79,57 @@ battleStart = function(choice){
     battleMenu();
 }
 
-fight = function(choice) {
-    foeAttack = player.attack - foe.armor
-    playerAttack = foe.attack - player.armor
-    player.health = foeAttack;
-    foe.health = playerAttack;
-    if (player.health < 0) {
-        EndGame()
+fight = function(attBoost, defBoost, regenBoost, moneyBoost) {
+    pAttack  = state.gladiator.attack + state.gladiator.attackFromItems;
+    pDef = state.gladiator.armor + state.gladiator.armorFromItems + state.gladiator.regeneration;
+    if (attBoost) {
+        pAttack = pAttack * attBoost;
     }
-    return(`Your gladiator loses ${foeAttack} health leaving you with ${player.health} health.`, `Your foe loses ${playerAttack} health leaving him with ${foe.health}`)
+    if (defBoost) {
+        pDef = pDef * defBoost;
+    }
+    if (regenBoost) {
+        pDef = pDef + regenBoost;
+    }
+    if (moneyBoost){
+        state.money += 2;
+        postToBoard(`You give the crowd a show and they toss you roses and gold coins`);
+        updateStats();
+    }
+    fAttack = state.gladiator.attack;
+    fDef = state.foe.armor + state.foe.regeneration;
+    pDamageCalc = fAttack - pDef;
+    if (pDamageCalc < 0) {  pDamageCalc = 0 };
+    fDamageCalc = pAttack - fDef;
+    if (fDamageCalc < 0) {  fDamageCalc = 0 };
+    state.gladiator.health -= pDamageCalc;
+    state.foe.health -= fDamageCalc;
+    // console.log("Fight Stats. pAttack " + pAttack + " pDef " + pDef + " fAttack " + fAttack + " fDef " + fDef + " pDamCalc: " + pDamageCalc + " fDamCalc: " + fDamageCalc);
+
+    let playerInfo = `Your gladiator loses ${pDamageCalc} health leaving you with ${state.gladiator.health} health.`;
+    let foeInfo = `Your foe loses ${fDamageCalc} health leaving him with ${state.foe.health}`
+    postToBoard(playerInfo);
+    postToBoard(foeInfo);
+    updateStats();
+    if (state.gladiator.health <= 0) {
+        defeatMenu();
+        return;
+    }
+    if (state.foe.health <= 0) {
+        victoryMenu();
+        return;
+    }
 }
 
 
 levelup = function(character) {
     character.level++;
-    character.health+=2;
+    character.health=character.maxHealth+2;
+    character.maxHealth+=2;
     character.skillpoints++;
+    postToBoard("You won the battle and level up!")
+    postToBoard(`Gladiator level increased to ${character.level}. Gladiator health increased to ${character.health}. Skillpoint added`);
+    updateStats();
 }
 
 skillup = function(choice){
@@ -105,8 +144,11 @@ skillup = function(choice){
     } else {
         state.money += 3;
     }
+    if(choice = "health"){
+        state.gladiator.maxHealth++;
+    }
     state.gladiator.skillpoints--;
-    updateStats(state.gladiator);
+    updateStats();
     postToBoard(options[choice]);
     skillupMenu();
 }
@@ -115,7 +157,8 @@ postToBoard = function(text){
     $("#Message-Board").prepend(`<p>${text}<p>`);
 }
 
-updateStats = function(stats) {
+updateStats = function() {
+    stats = state.gladiator
     $health.text("Health: " + stats.health);
     $attack.text("Attack: " + stats.attack + " + " + stats.attackFromItems);
     $regeneration.text("Regeneration: " + stats.regeneration);
@@ -138,13 +181,9 @@ buyItem = function(attack, armor, cost, name){
         }
         state.money -= cost;
     postToBoard(`You purchased the ${name} for $${cost}. It increased your ${change}`)
-    updateStats(state.gladiator);
+    updateStats();
 }
 
-//MainMenu
-//1. Set state
-//2. Display current options menu
-//3. 
 var mainMenu = function() {
     state.menu = "main";
     $allMenus.hide();
@@ -196,6 +235,7 @@ var victoryMenu = function() {
     state.menu = "victory";
     $allMenus.hide();
     $victoryMenu.show();
+    levelup(state.gladiator);
 }
 
 var defeatMenu = function() {
